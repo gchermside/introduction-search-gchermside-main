@@ -2,44 +2,22 @@
 # assignment-0-install
 
 # TASK 2
-In your README, describe maze generation as a basic search problem. What are the states, actions, and transitions? What are the start and goal states?
-
-To generate a perfect maze: 
-- A state is an array of cells and a location (a tuple of 2 numbers). Each cell has four sides that are either walls or not walls. 
-- the start state is a random square on the maze
-- the tranisitions are all the adjacent cells(left, right, up, or down) that have walls.
-- 
+Maze Generation as a search Problem:
+A state is an array of cells and a location (a tuple of 2 numbers). Each cell has four sides that are either walls or not walls. The start state is an array of cells where each one has a wall on all four sides and a random location in the maze. The goal state is a state where the outer edges of the array are all walls and for every square, there is a way to get there from every other square moving left, right, up or down and never passing through a wall. The actions are to move left, right, up, or down from the given cell and erase the wall being moved through. The transitions are from the current state to a new state with the location shifted up, down, left, or right and the wall inbetween erased as there is a wall to erase in that direction. 
 
 
 # TESTS
+To the function _check_maze I added:
+1. A test checking that the path is valid, meaning that each step is one transition from the previous step (no moving thorugh walls or taking more than one step at a time).
+2. A test checking that there are no duplicate states in the path.
 
-JUST TRASH I COULDN"T DELETE:
-    def generate_multi_solution_board(self, walls_to_remove):
-        """Generates the maze by randomly carving out paths using the drunken walk algorithm. Then removes extra walls"""
-        # Start generating the maze from a random start position
-        start_x, start_y = random.randint(0, self.width - 1), random.randint(0, self.height - 1)
-        self.drunken_walk(start_y, start_x)
-        for i in range(0, walls_to_remove):
-            row = random.randint(0, self.height - 1)
-            col = random.randint(0, self.width - 1)
-            directions = ['north', 'south', 'east', 'west']
-            random.shuffle(directions)  # Shuffle directions to ensure randomness
-            direction = directions.pop()
-            for direction in directions:
-                nx, ny = col, row
-                if direction == 'north':
-                    ny -= 1
-                elif direction == 'south':
-                    ny += 1
-                elif direction == 'east':
-                    nx += 1
-                elif direction == 'west':
-                    nx -= 1
-            if self.is_in_bounds(ny, nx):
-                print()
-                setattr(self.board[row][col], direction, 0)
-        self.visualize_maze(algorithm_name="in maze")
-
+Tests I added:
+1. checking that bfs and dfs find the right path when the start state is the goal state.
+2. checking that bfs and dfs can find the right path when there is only one way to go 
+by creating a maze with a height of one and another maze with a width of one.
+3. tested that bfs finds the shortest path when there are multiple ways to go in a directed graph.
+4. Tested that bfs and dfs return none whent here is no solution.
 
 
 Collaborators:
+Bhavani Venkatesan: Bounced ideas off each other. Helped set up VS workspace.

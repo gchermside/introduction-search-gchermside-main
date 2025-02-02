@@ -78,9 +78,6 @@ class IOTest(unittest.TestCase):
         self._check_maze(bfs, diff_start_and_goal_wide)
 
     def test_bfs_and_dfs_on_directed_graph(self):
-        """"
-        tasts
-        """
         two_by_two_graph = DirectedGraph([[None, 1], [None, None]], {1})
         self._check_maze(bfs, two_by_two_graph)
         self._check_maze(dfs, two_by_two_graph)

@@ -58,6 +58,8 @@ def dfs(problem: SearchProblem[State]) -> tuple[List[State], Dict[str, int]]:
     """
     stats = {"path_length": 0, "states_expanded": 0, "max_frontier_size": 0}
     paths_queue = [[problem.get_start_state()]]
+     #visited stores all states that have been added to the paths_queue 
+     # (even if they have not yet been removed from paths_queue)
     visited = [problem.get_start_state()]
     while(len(paths_queue) > 0):
         cur_path = paths_queue.pop(-1)
@@ -66,12 +68,12 @@ def dfs(problem: SearchProblem[State]) -> tuple[List[State], Dict[str, int]]:
             return (cur_path, stats)
         else:
             successors = problem.get_successors(cur_path[-1])
+            stats["states_expanded"] = stats["states_expanded"] + 1
             for successor in successors:
                 if successor not in visited:
                     new_path = cur_path + [successor]
                     paths_queue.append(new_path)
                     visited.append(successor)
-            stats["states_expanded"] = stats["states_expanded"] + 1
             stats["max_frontier_size"] = max(stats["max_frontier_size"], len(paths_queue))
     return None
 
@@ -105,37 +107,18 @@ def main():
     width, height = 10, 5
     maze = Maze(width, height)
 
-    tall_maze = Maze(1, 4)
-    tall_dfs_path, tall_dfs_stats = dfs(tall_maze)
-    print("Tall_dfs_path ", tall_dfs_path)
-    print("tall_dfs_stats ", tall_dfs_stats)
-    tall_maze.visualize_maze(path=tall_dfs_path, algorithm_name="tall_dfs")
-
-
-
-    # Run BFS and DFS to find paths
+    # Run BFS to find paths
     bfs_path, bfs_stats = bfs(maze)
     print("bfs_path ", bfs_path)
     print("bfs_stats ", bfs_stats)
-    maze.visualize_maze(path=bfs_path, algorithm_name="bfs")
+    # maze.visualize_maze(path=bfs_path, algorithm_name="bfs")
 
-# #testing on open floor plan to identify if BFS finds the shortest path
-#     bfs_path_open, bfs_stats_open = bfs(open_floor_plan)
-#     print("bfs_path ", bfs_path_open)
-#     print("bfs_stats ", bfs_stats_open)
-#     open_floor_plan.visualize_maze(path=bfs_path_open, algorithm_name="bfs on open floor plan")
-
-    # dfs_path_open, dfs_stats_open = dfs(open_floor_plan)
-    # print("dfs_path ", dfs_path_open)
-    # print("dfs_stats ", dfs_stats_open)
-    # open_floor_plan.visualize_maze(path=dfs_path_open, algorithm_name="dfs on open floor plan")
-
-# testing for DFS
+    # Run DFS to find paths
     print("DFS Path:")
     dfs_path, dfs_stats = dfs(maze)
     print(dfs_path)
     print("dfs_stats ", dfs_stats)
-    maze.visualize_maze(path=dfs_path, algorithm_name="dfs")
+    # maze.visualize_maze(path=dfs_path, algorithm_name="dfs")
 
 
 if __name__ == "__main__":
