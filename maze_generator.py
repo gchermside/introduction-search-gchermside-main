@@ -36,20 +36,20 @@ class MazeGenerator(SearchProblem[MazeState]):
         self.width = width
         self.height = height
         
-        # TODO: Initialize the maze grid with walls everywhere
-        self.board = None
+        # Initialize the maze grid with walls everywhere
+        self.board = self.board = [[MazeRoom() for _ in range(width)] for _ in range(height)]
 
-        # TODO: Start at a random location within the maze
-        start_x, start_y = None, None
+        # Start at a random location within the maze
+        start_x, start_y = random.randint(0, self.width - 1), random.randint(0, self.height - 1)
         
-        #TODO: Start the starting cell of the board as visited to be True
+        # Start the starting cell of the board as visited to be True
+        self.board[start_x][start_y].visited = True
 
-        # TODO: Set the initial start state and initialize the counters for the maze generation process
-        self.start_state = None 
+        # Set the initial start state and initialize the counters for the maze generation process
+        self.start_state = MazeState(self.board, (start_x, start_y)) 
         self.visited_cells_count = 1  # Start with the initial cell visited
-        self.total_cells = None   # Total number of cells in the maze
+        self.total_cells = self.width * self.height   # Total number of cells in the maze
 
-    # TODO: Fill out this method
     def get_start_state(self) -> MazeState:
         """
         Returns the start state of the maze.
@@ -60,9 +60,8 @@ class MazeGenerator(SearchProblem[MazeState]):
         Returns:
             MazeState: The initial state of the maze.
         """
-        pass
+        return self.start_state
         
-    # TODO: Fill out this method
     def is_goal_state(self, state: MazeState) -> bool:
         """
         Determines whether the goal state of the maze has been reached.
@@ -77,7 +76,9 @@ class MazeGenerator(SearchProblem[MazeState]):
             bool: True if all cells have been visited and the goal state is reached,
                 False otherwise.
         """
-        pass
+        if self.total_cells == self.visited_cells_count:
+            return True
+        return False
 
 
     # TODO: Fill out this method (Hint: we provide two helper functions below that may be of use)
@@ -97,7 +98,48 @@ class MazeGenerator(SearchProblem[MazeState]):
         Returns:
             set[MazeState]: A set of successor MazeState objects.
         """
-        pass
+        successors = set()
+        directions = ['north', 'south', 'east', 'west']
+        random.shuffle(directions) #doesn't move the same directions every maze generated
+        while directions:
+            # cur_direction = directions.pop()
+            start_row, start_col = state.location
+            for direction in directions:
+                new_row, new_col = self.get_row_and_col(start_row, start_col, direction)
+                #look at each room you could go from here
+                if self.is_in_range(new_row, new_col): 
+                    if state.board[new_row][new_col].visited is not True:
+                        #if we can move to a new, in-range MazeRoom: update the board to remove the wall 
+                        # from both cells and increase visited_cells_count
+                        setattr(self.board[start_row][start_col], direction, 0)
+                        setattr(self.board[new_row][new_col], self.opposite_direction(direction), 0)
+                        self.board[new_row][new_col].visited = True
+                        self.visited_cells_count += 1
+                        new_maze_state = MazeState(state.board, (new_row, new_col))
+                        successors.add(new_maze_state)
+            return successors
+
+    def get_row_and_col(self, start_row: int, start_col: int, direction: str) -> tuple[int, int]:
+        """
+        returns a new location, moved according to direction
+        Args:
+            start_row int: the current row location
+            start_col int: the current colum location
+            dirction (string): a cardinal direction(north, east, south, west) by which to move
+
+        Return:
+            a new location shifted 1 by direction
+        """
+        if direction == "north":
+            return (start_row - 1, start_col)
+        if direction == "south":
+            return (start_row + 1, start_col)
+        if direction == "west":
+            return (start_row, start_col - 1)
+        if direction == "east":
+            return (start_row, start_col + 1)
+        raise Exception("get_row_and_col not passed a valid direction")
+
 
 # /////////////////////////////// Don't Edit Beyond this Line! /////////////////////////////////////
 
@@ -147,27 +189,28 @@ def main():
     # Create Maze Generator
     generator = MazeGenerator(SIZE, SIZE)
 
-    print("bfs maze generation")
-    # Perform BFS to explore and generate the maze structure
-    bfs_result = bfs(generator) 
-    bfs_path = bfs_result[0]  # Extract the list of MazeState objects from the result
-    print(bfs_path)
+    # print("bfs maze generation")
+    # # Perform BFS to explore and generate the maze structure
+    # bfs_result = bfs(generator) 
+    # bfs_path = bfs_result[0]  # Extract the list of MazeState objects from the result
+    # print(bfs_path)
 
-    # Visualize the final state in BFS path
-    if bfs_path:
-        bfs_maze = Maze(generator.width, generator.height, board=bfs_path[-1].board) 
-        bfs_maze.visualize_maze(algorithm_name="bfs")
+    # # Visualize the final state in BFS path
+    # if bfs_path:
+    #     bfs_maze = Maze(generator.width, generator.height, board=bfs_path[-1].board) 
+    #     bfs_maze.visualize_maze(algorithm_name="bfs")
 
-        # Run BFS to solve maze
-        print("BFS Path:")
-        bfs_path, bfs_stats = bfs(bfs_maze)
-        bfs_maze.visualize_maze(path=bfs_path, algorithm_name="bfs")
+    #     # Run BFS to solve maze
+    #     print("BFS Path:")
+    #     bfs_path, bfs_stats = bfs(bfs_maze)
+    #     bfs_maze.visualize_maze(path=bfs_path, algorithm_name="bfs")
 
     generator = MazeGenerator(SIZE, SIZE)
 
     # Run DFS to generate a maze
     print("dfs maze generation")
     dfs_result = dfs(generator)
+    print("dfs_result", dfs_result)
     dfs_path = dfs_result[0]  # Extract the path from the result
     print(dfs_path)
 

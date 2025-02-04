@@ -25,7 +25,7 @@ def bfs(problem: SearchProblem[State]) -> Tuple[List[State], Dict[str, int]]:
     while(len(paths_queue) > 0):
         cur_path = paths_queue.pop(0)
         if problem.is_goal_state(cur_path[-1]): #if the end of the current path is the goal
-            stats["path_length"] = len(cur_path) - 1 
+            stats["path_length"] = len(cur_path)
             #cur_path if the number of squares visted, so the path length is one less because it is the number of lines between points
             return (cur_path, stats)
         else:
@@ -62,6 +62,8 @@ def dfs(problem: SearchProblem[State]) -> tuple[List[State], Dict[str, int]]:
      # (even if they have not yet been removed from paths_queue)
     visited = [problem.get_start_state()]
     while(len(paths_queue) > 0):
+        print("paths_queue ", paths_queue)
+        print("visited ", visited)
         cur_path = paths_queue.pop(-1)
         if problem.is_goal_state(cur_path[-1]): #if the end of the current path is the goal
             stats["path_length"] = len(cur_path)
