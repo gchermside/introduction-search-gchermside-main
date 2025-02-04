@@ -2,8 +2,9 @@
 # assignment-0-install
 
 # TASK 2
-Maze Generation as a search Problem:
-A state is an array of cells and a location (a tuple of 2 numbers). Each cell has four sides that are either walls or not walls. The start state is an array of cells where each one has a wall on all four sides and a random location in the maze. The goal state is a state where the outer edges of the array are all walls and for every square, there is a way to get there from every other square moving left, right, up or down and never passing through a wall. The actions are to move left, right, up, or down from the given cell and erase the wall being moved through. The transitions are from the current state to a new state with the location shifted up, down, left, or right and the wall inbetween erased as there is a wall to erase in that direction. 
+Maze generation as a search problem:
+
+In the context of a search problem, a state is an array of cells and a location (a tuple of 2 numbers). Each cell has four sides that are either walls or not walls. The start state is an array of cells where each one has a wall on all four sides and a random location in the maze. The goal state is a state where the outer edges of the array are all walls and for every square, there is a way to get to any other square by moving left, right, up or down and never passing through a wall. The actions are to move left, right, up, or down from the given cell and erase the wall being moved through. The transitions are from the current state to a new state with the location shifted up, down, left, or right and the wall inbetween erased if there is a wall to erase in that direction. When transitioning, the location is never moved out of the bounds of the maze, and never visits a location that has already been visted.
 
 
 # TESTS
@@ -20,4 +21,4 @@ by creating a maze with a height of one and another maze with a width of one.
 
 
 Collaborators:
-Bhavani Venkatesan: Bounced ideas off each other. Helped set up VS workspace.
+Bhavani Venkatesan: Bounced ideas off each other. Helped set up VS workspace. Trouble shooted maze_generator together at TA hours.

@@ -81,7 +81,6 @@ class MazeGenerator(SearchProblem[MazeState]):
         return False
 
 
-    # TODO: Fill out this method (Hint: we provide two helper functions below that may be of use)
     def get_successors(self, state: MazeState) -> set[MazeState]:
         """
         Generates the successor states from the current state in the maze.
@@ -102,14 +101,12 @@ class MazeGenerator(SearchProblem[MazeState]):
         directions = ['north', 'south', 'east', 'west']
         random.shuffle(directions) #doesn't move the same directions every maze generated
         while directions:
-            # cur_direction = directions.pop()
             start_row, start_col = state.location
             for direction in directions:
                 new_row, new_col = self.get_row_and_col(start_row, start_col, direction)
-                #look at each room you could go from here
                 if self.is_in_range(new_row, new_col): 
                     if state.board[new_row][new_col].visited is not True:
-                        #if we can move to a new, in-range MazeRoom: update the board to remove the wall 
+                        #if we can move to a new, in-range MazeRoom: update the board to remove the wall
                         # from both cells and increase visited_cells_count
                         setattr(self.board[start_row][start_col], direction, 0)
                         setattr(self.board[new_row][new_col], self.opposite_direction(direction), 0)
@@ -189,21 +186,21 @@ def main():
     # Create Maze Generator
     generator = MazeGenerator(SIZE, SIZE)
 
-    # print("bfs maze generation")
-    # # Perform BFS to explore and generate the maze structure
-    # bfs_result = bfs(generator) 
-    # bfs_path = bfs_result[0]  # Extract the list of MazeState objects from the result
-    # print(bfs_path)
+    print("bfs maze generation")
+    # Perform BFS to explore and generate the maze structure
+    bfs_result = bfs(generator)
+    bfs_path = bfs_result[0]  # Extract the list of MazeState objects from the result
+    print(bfs_path)
 
-    # # Visualize the final state in BFS path
-    # if bfs_path:
-    #     bfs_maze = Maze(generator.width, generator.height, board=bfs_path[-1].board) 
-    #     bfs_maze.visualize_maze(algorithm_name="bfs")
+    # Visualize the final state in BFS path
+    if bfs_path:
+        bfs_maze = Maze(generator.width, generator.height, board=bfs_path[-1].board) 
+        bfs_maze.visualize_maze(algorithm_name="bfs")
 
-    #     # Run BFS to solve maze
-    #     print("BFS Path:")
-    #     bfs_path, bfs_stats = bfs(bfs_maze)
-    #     bfs_maze.visualize_maze(path=bfs_path, algorithm_name="bfs")
+        # Run BFS to solve maze
+        print("BFS Path:")
+        bfs_path, bfs_stats = bfs(bfs_maze)
+        bfs_maze.visualize_maze(path=bfs_path, algorithm_name="bfs")
 
     generator = MazeGenerator(SIZE, SIZE)
 

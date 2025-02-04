@@ -62,8 +62,6 @@ def dfs(problem: SearchProblem[State]) -> tuple[List[State], Dict[str, int]]:
      # (even if they have not yet been removed from paths_queue)
     visited = [problem.get_start_state()]
     while(len(paths_queue) > 0):
-        print("paths_queue ", paths_queue)
-        print("visited ", visited)
         cur_path = paths_queue.pop(-1)
         if problem.is_goal_state(cur_path[-1]): #if the end of the current path is the goal
             stats["path_length"] = len(cur_path)

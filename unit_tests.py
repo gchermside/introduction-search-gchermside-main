@@ -82,6 +82,7 @@ class IOTest(unittest.TestCase):
         self._check_maze(bfs, two_by_two_graph)
         self._check_maze(dfs, two_by_two_graph)
 
+        #checks that BFS finds the shortest path when there are multiply solutions
         mulit_solution_paths_graph = DirectedGraph([
             [None, 1, 1, 1], 
             [None, None, 1, 1], 
@@ -91,6 +92,24 @@ class IOTest(unittest.TestCase):
         self._check_maze(bfs, mulit_solution_paths_graph, length=2)
         self._check_maze(dfs, mulit_solution_paths_graph)
 
+        mulit_solution_paths_graph2 = DirectedGraph([
+            [1, None, 1, 1], 
+            [None, 1, 1, 1], 
+            [None, 1, 1, 1],
+            [1, None, 1, 1]
+        ], {1}, start_state=0)
+        self._check_maze(bfs, mulit_solution_paths_graph2, length=3)
+        self._check_maze(dfs, mulit_solution_paths_graph2)
+
+        fully_connected_graph = DirectedGraph([
+            [1, 1, 1, 1], 
+            [1, 1, 1, 1], 
+            [1, 1, 1, 1],
+            [1, 1, 1, 1]
+        ], {2}, start_state=3)
+        self._check_maze(bfs, fully_connected_graph, length=2)
+        self._check_maze(dfs, fully_connected_graph)
+
         #testing when there is no solution:
         no_solution_graph = DirectedGraph([
             [None, None, 1, 1], 
@@ -99,8 +118,16 @@ class IOTest(unittest.TestCase):
             [None, None, None, None]
         ], {1}, start_state=0)
         no_path, _ = bfs(no_solution_graph)
-        self.assertEqual(no_path, None)
-        
+        self.assertEqual(no_path, None)        
+
+        no_solution_graph2 = DirectedGraph([
+            [None, None, None, 1], 
+            [None, None, 1, 1], 
+            [None, None, None, 1],
+            [None, None, 1, 1]
+        ], {1}, start_state=0)
+        no_path2, _ = bfs(no_solution_graph2)
+        self.assertEqual(no_path2, None)        
 
 
     def test_dfs_on_maze(self):
